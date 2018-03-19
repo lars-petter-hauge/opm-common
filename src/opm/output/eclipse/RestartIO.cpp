@@ -363,8 +363,9 @@ std::vector< double > serialize_OPM_XWEL( const data::Wells& wells,
 
     std::vector< double > xwel;
     for( const auto* sched_well : sched_wells ) {
-
-        if( wells.count( sched_well->name() ) == 0 || sched_well->getStatus(report_step) == Opm::WellCommon::SHUT) {
+        if( wells.count( sched_well->name() ) == 0 ||
+            sched_well->getStatus(report_step) == Opm::WellCommon::SHUT ||
+            sched_well->firstTimeStep() == report_step ) {
             const auto elems = (sched_well->getCompletions( report_step ).size()
                                * (phases.size() + data::Completion::restart_size))
                 + 2 /* bhp, temperature */
