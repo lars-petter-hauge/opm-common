@@ -379,8 +379,10 @@ std::vector< double > serialize_OPM_XWEL( const data::Wells& wells,
 
         xwel.push_back( well.bhp );
         xwel.push_back( well.temperature );
-        for( auto phase : phases )
-            xwel.push_back( well.rates.get( phase ) );
+        for( auto phase : phases ){
+            if ( well.rates.has( phase ) )
+                xwel.push_back( well.rates.get( phase ) );
+        }
 
         for( const auto& sc : sched_well->getCompletions( report_step ) ) {
             const auto i = sc.getI(), j = sc.getJ(), k = sc.getK();
@@ -406,8 +408,10 @@ std::vector< double > serialize_OPM_XWEL( const data::Wells& wells,
 
             xwel.push_back( completion->pressure );
             xwel.push_back( completion->reservoir_rate );
-            for( auto phase : phases )
-                xwel.push_back( completion->rates.get( phase ) );
+            for( auto phase : phases ) {
+                if ( completion->rates.has( phase ) )
+                    xwel.push_back(completion->rates.get(phase));
+            }
         }
     }
 
